@@ -1,6 +1,6 @@
 # Insta.yang
 ###### Description
-* Insta.yang is a premium version of B-gallery. In B-instagram, the administrator is not the only one with permisions to post pictures but also the other registered users can do the same as long as they have their accounts.
+* Insta.yang is a premium version of gallery. In Insta.yang the administrator is not the only one with permisions to post pictures but also the other registered users can do the same as long as they have their accounts.
 * It basically a custom made instagram with fewer features compared t the official instagram application.
 * Its simple and easy to use 
 ###### Author
