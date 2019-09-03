@@ -38,3 +38,61 @@ def profile(request,id):
             return redirect(no_profile,id)      
             
     return render(request,'profile/profile.html',{'user':user,'profile':profile,'images':images,'current_user':current_user})
+
+@login_required(login_url='/accounts/login/')
+def update_profile(request,id):
+    
+    current_user = request.user
+    user = User.objects.get(id=id)
+    if request.method == 'POST':
+        form = UpdateProfileForm(request.POST,request.FILES)
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.user_id=id
+            profile.save()
+            return redirect(home)
+    else:
+        form = UpdateProfileForm()
+    return render(request,'profile/update_profile.html',{'user':user,'form':form})
+
+def no_profile(request,id):
+    
+    user = User.objects.get(id=id)
+    return render(request,'profile/no_profile.html',{"user":user})
+
+def search_results(request):
+    profile = Profile.objects.all
+    
+    if 'user' in request.GET and request.GET["user"]:
+        search_term = request.GET.get("user")
+        
+        searched_users = User.objects.filter(username__icontains=search_term)
+        
+        message = f"{search_term}"
+        
+        return render(request, 'searched.html',{"message":message,"users": searched_users,"profile":profile})
+
+    else:
+        message = "Please input a name in the search form"
+        return render(request, 'searched.html',{"message":message})
+
+@login_required(login_url='/accounts/login/')
+def new_image(request,id):
+    current_user = request.user
+    try:
+        current_profile = Profile.objects.get(user_id=id)
+    except ObjectDoesNotExist:
+        return redirect(update_profile,current_user.id)
+        
+    if request.method == 'POST':
+        form = PostImage(request.POST, request.FILES)
+        if form.is_valid():
+            image = form.save(commit=False)
+            image.owner = current_user
+            image.profile = current_profile
+            image.save()
+        return redirect(home)
+    else:
+        form = PostImage()
+        
+    return render(request, 'new_image.html', {'user':current_user,"form": form})
