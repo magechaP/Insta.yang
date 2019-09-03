@@ -3,7 +3,7 @@ from .models import Profile
 from django.test import TestCase
 from .models import Image,Like,Comment
 
-class Intagram_TestCases(TestCase):
+class Instagram_TestCases(TestCase):
     def setUp(self):
         self.user1= User(id=1,username='James',email='jamesone12@gmail.com',password='ppppppp')
         self.user1.save()
