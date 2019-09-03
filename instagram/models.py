@@ -53,3 +53,33 @@ class Image(models.Model):
     def get_image_by_id(cls,id):
         image_result = cls.objects.get(id=id)
         return image_result
+
+class Comment(models.Model):
+    image = models.ForeignKey('Image')
+    user = models.ForeignKey(User)
+    comment = models.CharField(max_length=100)
+    posted_on = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.comment
+
+
+    def save_comment(self):
+        self.save()
+    def delete_comment(self):
+        self.delete()
+
+class Like(models.Model):
+    post = models.ForeignKey('Image')
+    user = models.ForeignKey(User)
+
+    class Meta:
+        unique_together = ("post", "user")
+
+    def __str__(self):
+        return 'Like: ' + self.user.username 
+
+class Followers(models.Model):
+    user = models.CharField(max_length=15)
+    follower = models.CharField(max_length=15)
+    following = models.CharField(max_length=15)        
